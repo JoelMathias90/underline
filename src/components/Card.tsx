@@ -2,9 +2,9 @@ import React, { ReactNode } from "react"
 
 interface CardProps {
     children: ReactNode;
-    width?: number | string,
-    height?: number | string,
-    backgroundColor?: string
+    width?: number | string;
+    height?: number | string;
+    backgroundColor?: string;
 }
 
 export default function Card({

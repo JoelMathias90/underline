@@ -2,18 +2,27 @@ import React, { ReactNode } from "react"
 
 interface CardProps {
     children: ReactNode;
-    className?: string;
+    width?: number | string,
+    height?: number | string,
+    backgroundColor?: string
 }
 
-export default function Card({ children, className }: CardProps) {
+export default function Card({
+    children,
+    width = 400,
+    height = 500,
+    backgroundColor = "white"
+}: CardProps) {
+
     return (
-        <div
-            className={className}
-            style={{
-                backgroundColor: !className ? "white":"",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.2)"
-            }}
-        >
+        <div style={{
+            width,
+            height,
+            backgroundColor,
+            padding: 16,
+            display: "flex",
+            flexDirection: "column"
+        }}>
             {children}
         </div>
     )

@@ -1,18 +1,36 @@
 'use client'
-  
-interface ButtonProps {
-    text?: string;
-    disabled?: boolean;
-    handleClick?: () => void;
+
+import { ButtonHTMLAttributes, ReactNode } from "react";
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    children: ReactNode;
+    loading?: boolean;
 }
 
-export default function Button ({text, disabled, handleClick} : ButtonProps) {
+export default function Button({
+    children,
+    loading = false,
+    disabled = false,
+    className = '',
+    type = 'button',
+    onClick,
+    ...props
+}: ButtonProps) {
+    const isDisabled = disabled || loading
+
     return (
-        <button disabled={disabled}
-            className={"cursor-pointer w-30 bg-gray-300 p-1"}
-            onClick={handleClick}
+        <button
+            type={type}
+            disabled={isDisabled}
+            className={className}
+            onClick={isDisabled ? undefined : onClick}
+            {...props}
         >
-            {disabled ? "loading" : text}
+            {loading ? (
+                children + "..."
+            ) : (
+                children
+            )}
         </button>
     )
 }

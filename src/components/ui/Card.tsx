@@ -1,28 +1,22 @@
-import React, { ReactNode } from "react"
+'use client'
 
-interface CardProps {
+import { HTMLAttributes, ReactNode } from "react"
+
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
     children: ReactNode;
-    width?: number | string;
-    height?: number | string;
-    backgroundColor?: string;
 }
 
 export default function Card({
     children,
-    width = 400,
-    height = 500,
-    backgroundColor = "white"
+    className = '',
+    ...props
 }: CardProps) {
 
     return (
-        <div style={{
-            width,
-            height,
-            backgroundColor,
-            padding: 16,
-            display: "flex",
-            flexDirection: "column"
-        }}>
+        <div
+            className={`relative flex flex-col gap-4 box-border p-8 bg-white text-black shadow-xl/30 ${className}`}
+            {...props}
+        >
             {children}
         </div>
     )

@@ -14,7 +14,7 @@ export default function Card({
 
     return (
         <div
-            className={`relative flex flex-col gap-4 box-border p-8 bg-white text-black shadow-xl/30 ${className}`}
+            className={`relative flex flex-col gap-4 box-border p-8 bg-white text-black border ${className}`}
             {...props}
         >
             {children}

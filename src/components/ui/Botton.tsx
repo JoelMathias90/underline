@@ -27,7 +27,7 @@ export default function Button({
             {...props}
         >
             {loading ? (
-                children + "..."
+                 "Carregando..."
             ) : (
                 children
             )}

@@ -21,7 +21,6 @@ export default function SignupForm() {
                 <Input
                     label="Primeiro Nome"
                     name="first_name"
-                    message={state?.message}
                     type="text"
                     required
                     placeholder="Seu primeiro nome"
@@ -74,9 +73,6 @@ export default function SignupForm() {
                 >
                     Cadastrar
                 </Button>
-                {state?.message && (
-                    <p>{state.message}</p>
-                )}
                 <div>
                     <p className="text-sm text-center">
                         Já tem uma conta?

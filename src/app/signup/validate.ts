@@ -6,7 +6,7 @@ export const userValidator = {
         if (!(/^\p{L}+(?:[ -]\p{L}+)*$/u).test(firstName)) return 'Válidos somente letras!'
         return ''
     },
-    
+
     email(email: string): string {
         if (!email.length) return 'Preenchimento obrigatório'
         if (!/^.{4,}@/.test(email)) return 'Usuário de email muito curto'
@@ -27,6 +27,11 @@ export const userValidator = {
     confirmPassword(confirmPassword: string, password: string): string {
         if (!confirmPassword.length) return 'Preenchimento obrigatório'
         if (confirmPassword !== password) return 'As senhas não coincidem'
+        return ''
+    },
+
+    acceptedTerms(acceptedTerms: boolean): string {
+        if (!acceptedTerms) return 'Obrigatório aceitar os Termos de Uso para se cadastrar'
         return ''
     }
 }

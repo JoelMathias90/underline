@@ -31,7 +31,7 @@ export const userValidator = {
     },
 
     acceptedTerms(acceptedTerms: boolean): string {
-        if (!acceptedTerms) return 'Obrigatório aceitar os Termos de Uso para se cadastrar'
+        if (!acceptedTerms) return 'Preciso Aceitar Termos de Uso'
         return ''
     }
 }

@@ -1,142 +1,178 @@
 'use client'
 
-import { ChangeEvent, useActionState, useEffect, useState } from "react";
-import SignupAction from "./actions";
-import Input from "../../components/ui/Input";
-import Button from "../../components/ui/Botton";
+import { ChangeEvent, FormEvent, useActionState, useEffect, useState } from "react";
+import { SignupActionState, UserData, UserError } from "@/types/UserType";
+import { signupAction } from "./actions";
+import { redirect } from "next/navigation";
+import { userValidator } from "./validate";
 
-type FormDataType = {
-    firstName: string
-    email: string
-    password: string
-    confirmPassword: string
-    acceptedTerms: boolean
-}
-
-const initialFormState: FormDataType = {
+const initialFormData: Readonly<UserData> = {
     firstName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    acceptedTerms: false,
+    acceptedTerms: false
 }
 
 export default function SignupForm() {
-    const [state, signupAction] = useActionState(SignupAction, null)
-    const [formData, setFormData] = useState<FormDataType>(initialFormState)
-    const isDisabled = !formData.acceptedTerms
+    const [actionState, dispatchAction, isPending] = useActionState<SignupActionState, FormData>(signupAction, {})
+    const [state, setState] = useState<UserData>(initialFormData)
+    const [errors, setErrors] = useState<UserError>({})
 
-    useEffect(() => {
-        setFormData(initialFormState)
-        if(state?.success) console.log(state.success);
-    }, [state])
-    
+    useEffect(() => {        
+        if (actionState?.success) {
+            console.log('Sucesso');
+            setState(initialFormData)
+            redirect('/')
+        }
 
-    function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-        const { name, value, type, checked } = e.target
-        
-        const newValue = type === 'checkbox' ? checked : value
+        if (actionState?.errors) {
+            console.log('Error');
+            setErrors(actionState.errors)
+        }
 
-        setFormData({
-            ...formData,
-            [name]: newValue
-        })
+    }, [actionState])
+
+function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    const { name, type, value, checked } = event.target
+
+    setState(prev => ({
+        ...prev,
+        [name as keyof UserData]: type === 'checkbox' ? checked : value
+    }))
+}
+
+const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    if (!state.acceptedTerms) {
+        setErrors(prev => ({
+            ...prev,
+            ['acceptedTerms']: userValidator['acceptedTerms'](state.acceptedTerms)
+        }))
+        event.preventDefault()
+        return
     }
 
-    return (
+}
+
+return (
+    <div className="flex flex-col justify-center gap-8 p-8 border">
+
+        <h1 className="text-3xl">
+            Cadastrar-se
+        </h1>
+
         <form
-            action={signupAction}
-            className="relative flex flex-col gap-4 box-border p-8 border"
+            noValidate
+            onSubmit={handleSubmit}
+            action={dispatchAction}
+            className="flex flex-col gap-4 box-border"
         >
-            <h1 className="flex justify-center mb-4 text-3xl">
-                Cadastrar-se
-            </h1>
 
-            <Input
-                label="Primeiro Nome"
-                name="firstName"
-                type="text"
-                required
-                placeholder="Seu primeiro nome"
-                className="flex box-border min-w-80 min-h-10 border-b-2 focus:outline-none"
-                value={formData.firstName}
-                onChange={e => handleInputChange(e)}
-            />
-
-            <Input
-                label="Email"
-                name="email"
-                type="email"
-                required
-                placeholder="example@mail.com"
-                value={formData.email}
-                onChange={e => handleInputChange(e)}
-                className="flex box-border min-w-80 min-h-10 border-b-2 focus:outline-none"
-            />
-
-            <Input
-                label="Senha"
-                name="password"
-                type="password"
-                required
-                placeholder="Digite uma senha"
-                value={formData.password}
-                onChange={e => handleInputChange(e)}
-                className="flex box-border min-w-80 min-h-10 border-b-2 focus:outline-none"
-            />
-
-            <Input
-                label="Confimar Senha"
-                name="confirmPassword"
-                type="password"
-                required
-                placeholder="Confirme sua senha"
-                value={formData.confirmPassword}
-                onChange={e => handleInputChange(e)}
-                className="flex box-border min-w-80 min-h-10 border-b-2 focus:outline-none"
-            />
-
-            {/* Checkbox */}
-
-            <label className="flex gap-2 box-border mb-4">
-                <Input
-                    name="acceptedTerms"
-                    type="checkbox"
-                    required
-                    checked={formData.acceptedTerms}
-                    onChange={e => handleInputChange(e)}
-                    className="size-4"
+            <div className="flex flex-col">
+                <label htmlFor="firstName">
+                    Primeiro Nome
+                </label>
+                <input
+                    type="text"
+                    name="firstName"
+                    id="firstName"
+                    placeholder="Seu primeiro nome"
+                    value={state.firstName}
+                    onChange={handleInputChange}
+                    className="border-b-2"
                 />
-                <span>
-                    Eu aceito os{" "}
-                    <a
-                        href="policy"
-                        className="text-blue-600 hover:text-blue-800 underline"
-                    >
-                        Termos de Uso
-                    </a>.
-                </span>
-            </label>
+                <p className="">{errors.firstName}</p>
+            </div>
 
-            <Button
-                type="submit"
-                disabled={isDisabled}
-                className="flex flex-col justify-center box-border min-w-80 min-h-10 bg-black text-lg text-white hover:bg-gray-700 cursor-pointer"
-            >
-                Cadastrar
-            </Button>
+            <div className="flex flex-col">
+                <label htmlFor="email">
+                    Email
+                </label>
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="example@email.com"
+                    value={state.email}
+                    onChange={handleInputChange}
+                    className="border-b-2"
+
+                />
+                <p className="">{errors.email}</p>
+
+            </div>
+
+            <div className="flex flex-col">
+                <label htmlFor="password">
+                    Senha
+                </label>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Sua senha"
+                    value={state.password}
+                    onChange={handleInputChange}
+                    className="border-b-2"
+
+                />
+                <p className="">{errors.password}</p>
+
+            </div>
+
+            <div className="flex flex-col">
+                <label htmlFor="confirmPassword">
+                    Confirmar Senha
+                </label>
+                <input
+                    type="password"
+                    name="confirmPassword"
+                    id="confirmPassword"
+                    placeholder="Confirme sua senha"
+                    value={state.confirmPassword}
+                    onChange={handleInputChange}
+                    className="border-b-2"
+                />
+                <p className="">{errors.confirmPassword}</p>
+
+            </div>
 
             <div>
-                <p className="text-sm text-center">
-                    Já tem uma conta?
-                    <a
-                        href="/signin"
-                        className="pl-1 text-sm text-blue-600 hover:text-blue-800 underline"
-                    >
-                        Entre aqui
+                <input
+                    type="checkbox"
+                    name="acceptedTerms"
+                    id="acceptedTerms"
+                    checked={state.acceptedTerms}
+                    onChange={handleInputChange}
+                    className="border-b-2"
+
+                />
+                <label htmlFor="acceptedTerms">
+                    Eu aceito os
+                    <a href="acceptedTerms">
+                        Termos de Uso
                     </a>
-                </p>
+                </label>
+                <p className="">{errors.acceptedTerms}</p>
+
             </div>
+
+            <button
+                type="submit"
+                disabled={isPending}
+                className="border bg-black text-white disabled:border-gray-200"
+            >
+                Cadastrar
+            </button>
+
         </form>
-    )
+        <p>
+            Já possui uma conta?
+            <a href="signin">
+                Entre aqui
+            </a>
+        </p>
+    </div>
+
+)
 }

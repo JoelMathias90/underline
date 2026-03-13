@@ -1,34 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📜 Proposta Executiva: Arquitetura de Projeto para Portfólio de Fotografia
 
-## Getting Started
+O presente projeto visa transformar um portfólio de fotografia em uma **plataforma digital dinâmica e de alta conversão**, utilizando uma arquitetura moderna para maximizar a captação de clientes e a gestão de conteúdo.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# 🎯 Propósito Estratégico do Projeto
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O objetivo primário é ir além de um simples mostruário estático. A plataforma será uma **ferramenta ativa para gerar prova social e aumentar a clientela da fotógrafa**.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Isso será alcançado através de:
 
-## Learn More
+- **Apresentação imersiva dos trabalhos**
+  - Galeria
+  - Blog
 
-To learn more about Next.js, take a look at the following resources:
+- **Sistemas de interação**
+  - Comentários
+  - Likes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Esses mecanismos são projetados para **engajar o visitante e criar gatilhos emocionais**, aumentando a confiança de novos clientes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+O sistema também será:
 
-## Deploy on Vercel
+- **Uma solução completa de gestão para a fotógrafa**
+- **Um ambiente seguro para os clientes**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# 🏗️ Bases da Arquitetura Técnica
+
+A fundação do projeto reside em:
+
+- **Next.js (App Router)**
+- **TypeScript**
+- **Tailwind CSS**
+- **Hospedagem na Vercel**
+
+Essa combinação garante:
+
+- tipagem estática e maior confiabilidade do código
+- desenvolvimento consistente e escalável
+- renderização otimizada para **SEO**
+- **alta performance**
+
+A performance é tratada como **prioridade máxima**, especialmente por se tratar de uma aplicação fortemente baseada em imagens.
+
+---
+
+# 🖼️ Mídia e Desempenho
+
+Toda a gestão de mídia será realizada utilizando **Supabase Storage**.
+
+O armazenamento incluirá:
+
+- fotos da galeria
+- imagens do blog
+- imagens de perfil
+- conteúdos enviados por usuários
+
+O **Next.js** será responsável pela entrega otimizada das imagens utilizando o componente:
+
+```tsx
+import Image from "next/image"
